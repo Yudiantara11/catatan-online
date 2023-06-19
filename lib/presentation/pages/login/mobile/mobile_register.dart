@@ -1,30 +1,29 @@
-import 'dart:developer';
-
 import 'package:catatan/presentation/controller/auth_controller.dart';
-import 'package:catatan/presentation/pages/mobile_pages.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
-import 'mobile_register.dart';
-
-class MobileLogin extends StatefulWidget {
-  const MobileLogin({super.key});
+class MobileRegister extends StatefulWidget {
+  const MobileRegister({super.key});
 
   @override
-  State<MobileLogin> createState() => _MobileLoginState();
+  State<MobileRegister> createState() => _MobileRegisterState();
 }
 
-class _MobileLoginState extends State<MobileLogin> {
+class _MobileRegisterState extends State<MobileRegister> {
   TextEditingController emailC = TextEditingController();
   TextEditingController passwordC = TextEditingController();
-
+  TextEditingController nameC = TextEditingController();
   final authC = Get.find<AuthController>();
+
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final AsyncSnapshot<User?> Fireusers;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: SingleChildScrollView(
 
@@ -43,7 +42,7 @@ class _MobileLoginState extends State<MobileLogin> {
                       style:
                           TextStyle(fontSize: 40, fontWeight: FontWeight.w800),
                     ),
-                    Text('\nLogin untuk melanjutkan',
+                    Text('\nRegister di sini',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w400)),
                   ],
@@ -56,6 +55,22 @@ class _MobileLoginState extends State<MobileLogin> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: 50,
+                          child: TextFormField(
+                            controller: nameC,
+                            decoration: InputDecoration(
+                              hintText: 'Nama',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                         Container(
                           width: MediaQuery.of(context).size.width * 0.8,
                           height: 50,
@@ -94,55 +109,36 @@ class _MobileLoginState extends State<MobileLogin> {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () async{
-                              bool isLogin = false;
-                              isLogin = await authC.login(emailC.text, passwordC.text);                             
+                              bool isRegister = true;
+                              isRegister = await authC.register(emailC.text, passwordC.text);
+                              if(isRegister) {
+                                
+                                Navigator.pop(context);
+                                
 
-                              if (isLogin) {
-                                // Navigator.pop(context);
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => MobileMain()));
+                                firestore.collection('users').doc(emailC.text).get().then((doc) async {
+                                  if (!doc.exists) {
+                                    firestore.collection('users').doc(emailC.text).set({
+                                      'nama': nameC.text,
+                                    });
+                                  }
+                                });
+                                
                               }
                               else {
-                                FocusScope.of(context).unfocus();
-                                //open dialog error
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('Login Gagal'),
-                                      content: const Text('Email atau Password salah'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
-                                    );
-                                  }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Register gagal'),
+                                  ),
                                 );
                               }
-
-                              log(isLogin.toString());
+                              
                             },
-                            child: Text('Login'),
+                            child: Text('Register'),
                           ),
                         ),
                         SizedBox(
                           height: 20,
-                        ),
-                        Container(
-                          width: 100,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MobileRegister()));
-                            },
-                            child: Text('Register'),
-                          ),
                         ),
                       ],
                     ),
@@ -151,7 +147,6 @@ class _MobileLoginState extends State<MobileLogin> {
           ),
         ),
       ),
-        
     );
   }
 }

@@ -54,6 +54,30 @@ class AuthController extends GetxController {
     SisLogin = false;
   }
 
+  
+  Future<bool> register(String email, String password) async {
+    try {
+      final credential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      SisLogin = true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        log('The password provided is too weak.');
+        return false;
+      } else if (e.code == 'email-already-in-use') {
+        log('The account already exists for that email.');
+        return false;
+      }
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+
+    return true;
+  }
+
 
 
 }

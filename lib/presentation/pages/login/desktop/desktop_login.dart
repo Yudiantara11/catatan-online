@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:catatan/presentation/controller/auth_controller.dart';
+import 'package:catatan/presentation/pages/login/mobile/mobile_register.dart';
 import 'package:catatan/presentation/pages/mobile_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -145,6 +146,16 @@ class _DesktopLoginState extends State<DesktopLogin> {
                           ),
                           SizedBox(
                             height: 20,
+                          ),
+                          Container(
+                            width: 100,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => MobileRegister()));
+                              },
+                              child: Text('Register'),
+                            ),
                           ),
                         ],
                       ),

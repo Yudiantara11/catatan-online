@@ -32,22 +32,14 @@ class _MobileHomeState extends State<MobileHome> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    fetchData();
     firestore.collection('users').doc(widget.user.data!.email).get().then((doc) {
       String data = doc.data()!['nama'];
-      
       setState(() {
         nama = data;
       });
     });
-
-    // check is there any firestore collection "catatan" with document name same as user email
-    // if not, create one
-    // then create an place to holds all catatan
-    // consist of catatan title, catatan content, and catatan date
-
-    fetchData();
-
-    
   }
 
   void fetchData () async{
