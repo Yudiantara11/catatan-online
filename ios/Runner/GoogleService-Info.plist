@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>786099462074-o3acl4js5dhjbsc61quo18itci2a6t3l.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.786099462074-o3acl4js5dhjbsc61quo18itci2a6t3l</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAbSQEmp3u73rMkB_Y3kjtcf2L-tNgViek</string>
+	<key>GCM_SENDER_ID</key>
+	<string>786099462074</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.catatan</string>
+	<key>PROJECT_ID</key>
+	<string>catatan-ed683</string>
+	<key>STORAGE_BUCKET</key>
+	<string>catatan-ed683.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:786099462074:ios:2e9669794322fb13444783</string>
+</dict>
+</plist>
