@@ -34,7 +34,11 @@ class _MobileHomeState extends State<MobileHome> {
     super.initState();
 
     fetchData();
-    firestore.collection('users').doc(widget.user.data!.email).get().then((doc) {
+    firestore
+        .collection('users')
+        .doc(widget.user.data!.email)
+        .get()
+        .then((doc) {
       String data = doc.data()!['nama'];
       setState(() {
         nama = data;
@@ -42,29 +46,36 @@ class _MobileHomeState extends State<MobileHome> {
     });
   }
 
-  void fetchData () async{
-    firestore.collection('catatan').doc(widget.user.data!.email).get().then((doc) async {
+  void fetchData() async {
+    firestore
+        .collection('catatan')
+        .doc(widget.user.data!.email)
+        .get()
+        .then((doc) async {
       if (!doc.exists) {
         firestore.collection('catatan').doc(widget.user.data!.email).set({
           'catatan': [],
           'judul': [],
           'tanggal': [],
         });
-      }
-      else {
+      } else {
         // read all catatan and put it into list
         // then show it to user
         log('here');
-        await firestore.collection('catatan').doc(widget.user.data!.email).get().then((doc) {
-            catatan = List<String>.from(doc.data()!['catatan'] as List).cast<String>();
-            judul = List<String>.from(doc.data()!['judul'] as List).cast<String>();
-            tanggal = List<String>.from(doc.data()!['tanggal'] as List).cast<String>();
-          });
-
-        setState(() {
-          
+        await firestore
+            .collection('catatan')
+            .doc(widget.user.data!.email)
+            .get()
+            .then((doc) {
+          catatan =
+              List<String>.from(doc.data()!['catatan'] as List).cast<String>();
+          judul =
+              List<String>.from(doc.data()!['judul'] as List).cast<String>();
+          tanggal =
+              List<String>.from(doc.data()!['tanggal'] as List).cast<String>();
         });
 
+        setState(() {});
       }
     });
   }
@@ -77,166 +88,179 @@ class _MobileHomeState extends State<MobileHome> {
   @override
   Widget build(BuildContext context) {
     // fetchData();
-    
+
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Text('Catatan Online'),
-            Spacer(),
-            IconButton(
-              onPressed: () {
-                catatan.clear;
-                judul.clear;
-                tanggal.clear;
-                setState(() {
-                  
-                });
-                fetchData();
-              },
-              icon: const Icon(Icons.refresh)
-            ),
-          ],
-        ),
-      ),
-      body: (catatan.isEmpty) ?
-       const Center(
-        child: Text('Belum ada catatan', style: TextStyle(fontSize: 20),),
-        // child: FloatingActionButton(onPressed: () {fetchData();}),
-      ):
-      ListView.builder(
-        itemBuilder: ((context, index) {
-          return Card(
-            child: ListTile(
-              title: Text(judul[index]),
-              subtitle: Text(tanggal[index]),
-              onTap: () async{
-                await Navigator.push(context, MaterialPageRoute(builder: (context) => MobileDetail(user: widget.user, index: index,)));
-                fetchData();
-              },
-            ),
-          );
-        }),
-        itemCount: catatan.length,
-        ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Text(
+                "Lil Notes Mobile",
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 255, 255, 255)),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    nama,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    widget.user.data!.email!,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-                authC.logout();
-              },
-            ),
-          ],
+              Spacer(),
+              IconButton(
+                  onPressed: () {
+                    catatan.clear;
+                    judul.clear;
+                    tanggal.clear;
+                    setState(() {});
+                    fetchData();
+                  },
+                  icon: const Icon(Icons.refresh)),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              String judul = '';
-              String isi = '';
-              return AlertDialog(
-                title: const Text('Tambah Catatan'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
+        body: (catatan.isEmpty)
+            ? const Center(
+                child: Text(
+                  'Belum ada catatan',
+                  style: TextStyle(
+                      fontSize: 20, color: Color.fromARGB(255, 236, 0, 114)),
+                ),
+                // child: FloatingActionButton(onPressed: () {fetchData();}),
+              )
+            : ListView.builder(
+                itemBuilder: ((context, index) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(judul[index]),
+                      subtitle: Text(tanggal[index]),
+                      onTap: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MobileDetail(
+                                      user: widget.user,
+                                      index: index,
+                                    )));
+                        fetchData();
+                      },
+                    ),
+                  );
+                }),
+                itemCount: catatan.length,
+              ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 54, 54, 54),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextField(
-                      decoration: const InputDecoration(
-                        labelText: 'Judul',
-                      ),
-                      onChanged: (value) {
-                        judul = value;
-                      },
+                    const CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Color.fromARGB(1, 255, 255, 255),
                     ),
-                    TextField(
-                      decoration: const InputDecoration(
-                        labelText: 'Isi',
+                    const SizedBox(height: 10),
+                    Text(
+                      nama,
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontSize: 18,
                       ),
-                      onChanged: (value) {
-                        isi = value;
-                      },
-                      minLines: 3,
-                      maxLines: null,
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      widget.user.data!.email!,
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 235, 235, 235),
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Batal'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Logout'),
+                onTap: () {
+                  authC.logout();
+                },
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                String judul = '';
+                String isi = '';
+                return AlertDialog(
+                  title: const Text('Tambah Catatan'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Judul',
+                        ),
+                        onChanged: (value) {
+                          judul = value;
+                        },
+                      ),
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Isi',
+                        ),
+                        onChanged: (value) {
+                          isi = value;
+                        },
+                        minLines: 3,
+                        maxLines: null,
+                      ),
+                    ],
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // TODO: Implement save functionality
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Batal'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // TODO: Implement save functionality
 
-                      // add new catatan to firestore
-                      // then update the list
-                      // then show it to user
+                        // add new catatan to firestore
+                        // then update the list
+                        // then show it to user
 
-                      firestore.collection('catatan').doc(widget.user.data!.email).update({
-                        'catatan': FieldValue.arrayUnion([isi]),
-                        'judul': FieldValue.arrayUnion([judul]),
-                        'tanggal': FieldValue.arrayUnion([DateTime.now().toString()]),
-                      });
+                        firestore
+                            .collection('catatan')
+                            .doc(widget.user.data!.email)
+                            .update({
+                          'catatan': FieldValue.arrayUnion([isi]),
+                          'judul': FieldValue.arrayUnion([judul]),
+                          'tanggal': FieldValue.arrayUnion(
+                              [DateTime.now().toString()]),
+                        });
 
-                      setState(() {
-                        catatan.add(isi);
-                        this.judul.add(judul);
-                        tanggal.add(DateTime.now().toString());
-                      });
+                        setState(() {
+                          catatan.add(isi);
+                          this.judul.add(judul);
+                          tanggal.add(DateTime.now().toString());
+                        });
 
-                      Navigator.pop(context);
-                      
-                    },
-                    child: const Text('Simpan'),
-                  ),
-                ],
-              );
-            },
-          );
-
-        },
-        child: const Icon(Icons.add),
-      )
-
-    );
-      
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Simpan'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          child: const Icon(Icons.add),
+        ));
   }
 }

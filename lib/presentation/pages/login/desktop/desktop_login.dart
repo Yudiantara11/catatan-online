@@ -26,7 +26,6 @@ class _DesktopLoginState extends State<DesktopLogin> {
       // resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: SingleChildScrollView(
-
           child: Column(
             children: [
               Container(
@@ -42,8 +41,9 @@ class _DesktopLoginState extends State<DesktopLogin> {
                       style:
                           TextStyle(fontSize: 40, fontWeight: FontWeight.w800),
                     ),
-                    Text('Sinkronisasi catatan mu baik di web maupun di mobile', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
-                    
+                    Text('Sinkronisasi catatan mu baik di web maupun di mobile',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w400)),
                   ],
                 )),
               ),
@@ -68,7 +68,9 @@ class _DesktopLoginState extends State<DesktopLogin> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Login untuk melanjutkan', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
+                          const Text('Login untuk melanjutkan',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w400)),
                           SizedBox(
                             height: 20,
                           ),
@@ -109,36 +111,36 @@ class _DesktopLoginState extends State<DesktopLogin> {
                             width: 100,
                             height: 50,
                             child: ElevatedButton(
-                              onPressed: () async{
+                              onPressed: () async {
                                 bool isLogin = false;
-                                isLogin = await authC.login(emailC.text, passwordC.text);                             
-              
+                                isLogin = await authC.login(
+                                    emailC.text, passwordC.text);
+
                                 if (isLogin) {
                                   // Navigator.pop(context);
                                   // Navigator.push(context, MaterialPageRoute(builder: (context) => MobileMain()));
-                                }
-                                else {
+                                } else {
                                   FocusScope.of(context).unfocus();
                                   //open dialog error
                                   showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Login Gagal'),
-                                        content: const Text('Email atau Password salah'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('OK'),
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                  );
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('Login Gagal'),
+                                          content: const Text(
+                                              'Email atau Password salah'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      });
                                 }
-              
+
                                 log(isLogin.toString());
                               },
                               child: Text('Login'),
@@ -152,7 +154,11 @@ class _DesktopLoginState extends State<DesktopLogin> {
                             height: 50,
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => MobileRegister()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            MobileRegister()));
                               },
                               child: Text('Register'),
                             ),
@@ -165,7 +171,6 @@ class _DesktopLoginState extends State<DesktopLogin> {
           ),
         ),
       ),
-        
     );
   }
 }
